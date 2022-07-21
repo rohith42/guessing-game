@@ -49,8 +49,12 @@ export default function GameScreen({ actual, onGameOver }) {
             <View style={styles.feedbackContainer}>
                 <Text>Higher or Lower?</Text>
                 <View style={styles.buttonsContainer}>
-                    <PrimaryButton onPress={newGuess.bind(this, '-')} >-</PrimaryButton>
-                    <PrimaryButton onPress={newGuess.bind(this, '+')} >+</PrimaryButton>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={newGuess.bind(this, '-')} >-</PrimaryButton>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={newGuess.bind(this, '+')} >+</PrimaryButton>
+                    </View>
                 </View>
             </View>
 
@@ -83,5 +87,9 @@ const styles = StyleSheet.create({
         alignContent: "center",
         alignItems: 'center',
         justifyContent: "space-evenly",
+    },
+    buttonContainer: {
+        flex: 1,
+        marginHorizontal: 5,
     },
 });
