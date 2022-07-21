@@ -1,20 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from 'react';
+
+import StartGameScreen from './screens/StartGameScreen';
+import GameScreen from './screens/GameScreen';
+import GameOverScreen from './screens/GameOverScreen';
 
 export default function App() {
+  const [userNumber, setUserNumber] = useState();
+  const [gameOver, setGameOver] = useState(true);
+
+  function pickedNumberHandler(pickedNumber) {
+    setUserNumber(pickedNumber);
+    setGameOver(false);
+  }
+
+  function gameOverHandler() {
+    setGameOver(true);
+  }
+  
+  let screen = <StartGameScreen pickNumber={pickedNumberHandler} />;
+
+  if (userNumber) {
+    screen = <GameScreen actual={userNumber} onGameOver={gameOverHandler} />;
+  }
+
+  if (userNumber && gameOver) {
+    screen = <GameOverScreen />
+  }
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <LinearGradient colors={['aqua', 'white']} style={styles.container}>
+      <SafeAreaView style={styles.container} >{screen}</SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
