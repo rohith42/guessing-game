@@ -2,21 +2,21 @@ import { Pressable, Text, View, StyleSheet } from 'react-native';
 import colors from '../Constants/Colors';
 
 
-export default function PrimaryButton(props) {
+export default function PrimaryButton({ children, onPress }) {
     // props.children is a special keyword for anything that appears
     // between the <PrimaryButton></PrimaryButton> tags
     
     return (
         <View style={styles.outerContainer}>
             <Pressable 
-                onPress={props.onPress}
+                onPress={onPress}
                 style={({pressed}) => {
                     if (pressed) {
                         return [styles.innerContainer, styles.pressedButton];
                     } else return styles.innerContainer;
                 }}
             >
-                <Text style={styles.buttonText} >{props.children}</Text>
+                <Text style={styles.buttonText} >{children}</Text>
             </Pressable>
         </View>
     );

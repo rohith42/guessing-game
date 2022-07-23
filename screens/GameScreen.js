@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
 
 import Title from "../components/Title";
 import NumberContainer from "../components/NumberContainer";
@@ -10,7 +10,9 @@ let min = 1;
 let max = 100;
 
 export default function GameScreen({ actual, onGameOver }) {
-    const [guess, setGuess] = useState( rng(min, max) );
+    let initial = rng(min, max);
+    const [guess, setGuess] = useState(initial);
+    const [guesses, setGuesses] = useState([initial]);
 
     useEffect(() => {
         if (guess === actual) {
@@ -18,6 +20,14 @@ export default function GameScreen({ actual, onGameOver }) {
         }
     }, [guess, actual, onGameOver]);
     
+    useEffect(() => {
+        min = 1;
+        max = 100;
+        initial = rng(min, max);
+        setGuess(initial);
+        setGuesses([initial]);
+    }, []);
+
     function rng(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -38,7 +48,9 @@ export default function GameScreen({ actual, onGameOver }) {
         } else {
             min = guess + 1;
         }
-        setGuess( rng(min, max) );
+        let newGuess = rng(min, max);
+        setGuess(newGuess);
+        setGuesses(prev => [newGuess, ...prev]);
     }
     
     return (
@@ -58,7 +70,13 @@ export default function GameScreen({ actual, onGameOver }) {
                 </View>
             </View>
 
-            {/* <View>LOG ROUNDS</View> */}
+            <View style={styles.log}>
+                <FlatList
+                    data={guesses}
+                    renderItem={itemData => <Text>{itemData.item}</Text>}
+                    keyExtractor={item => item} 
+                />
+            </View>
 
         </View>
     );
@@ -91,5 +109,12 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flex: 1,
         marginHorizontal: 5,
+    },
+    log: {
+        alignItems: "center",
+        alignContent: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        marginVertical: 10,
     },
 });
